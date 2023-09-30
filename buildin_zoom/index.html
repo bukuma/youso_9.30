@@ -1,0 +1,75 @@
+<html xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
+<head>
+<title></title>
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="viewport" content="width=device-width, minimum-scale=1.0" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+   <link type="text/css" rel="stylesheet" href="./css/aristo/jquery-ui-1.8.16.custom.css" />
+   <link type="text/css" rel="stylesheet" href="./css/jquery.layout.css" />
+   <link type="text/css" rel="stylesheet" href="./css/application.css" />
+
+   <script src="./lib/jquery.js"></script>
+   <script src="./lib/jquery.browser.js"></script>
+   <script src="./lib/jquery-ui.js"></script>
+   <script src="./lib/jquery.layout.js"></script>
+
+   <script src="../draw2d.js"></script>
+
+	 <script src="./gui/Application.js"></script>
+	 <script src="./gui/View.js"></script>
+	 <script src="./gui/Toolbar.js"></script>
+
+<script type="text/javascript">
+
+document.addEventListener("DOMContentLoaded",function () {
+//ウェブページが全てのHTML要素を読み込んでDOM（Document Object Model）が構築された後に実行
+
+    // Everything is loaded - core and application. Now can create the
+    // application
+    //
+   	var app  = new example.Application();
+    //新しいexample.Applicationのインスタンスを作成し、そのインスタンスを変数appに格納
+    //example.Application" はアプリケーションの特定のクラスやライブラリを表す
+
+    // 10   = Grid size
+    // true = consider zoom and resize the grid
+    //appという変数を使用して特定のキャンバス（canvas）に編集ポリシー（edit policy）をインストール
+    app.view.installEditPolicy(new draw2d.policy.canvas.ShowGridEditPolicy());
+    //グリッドを表示する編集ポリシーをインストール
+    //グリッドを表示するポリシーは、キャンバス上にグリッド線を描画し、図形や要素をグリッドに沿って配置するのに役立つ   
+
+    app.view.installEditPolicy(new draw2d.policy.canvas.SnapToGeometryEditPolicy());
+    //ジオメトリにスナップ（吸着）する編集ポリシーをインストール
+    //図形を他の図形の境界や角度に自動的に吸着させ、位置を整えるのに役立つ
+    app.view.installEditPolicy(new draw2d.policy.canvas.SnapToInBetweenEditPolicy());
+    //オブジェクト間のスナップを行う編集ポリシーをインストール
+    //オブジェクト同士の相対位置を保つために役立つ
+    app.view.installEditPolicy(new draw2d.policy.canvas.SnapToCenterEditPolicy());
+    //オブジェクトの中心にスナップする編集ポリシーをインストール
+    //オブジェクトをキャンバス内で中央に配置するのに役立つ
+
+    /////////////////////////////////////////////////////////////////////
+    // JUST ADD SOME DOCU ELEMENTS ON THE SCREEN
+    /////////////////////////////////////////////////////////////////////
+    //draw2d ライブラリ内の shape.note.PostIt コンストラクタを使用して、新しい「メモ」の形状を作成
+    var msg = new draw2d.shape.note.PostIt({text: "A canvas has per default a mouse wheel zoom support.\nPress 'SHIFT' and the mouse wheel to zoom in/out."});
+    app.view.add(msg, 20,20);
+
+});
+
+
+</script>
+
+</head>
+
+
+<body id="container">
+
+   		<div id="toolbar"></div>
+        <!--id 属性が "toolbar" に設定されている-->
+   		<div id="canvas" class="" style="width:3000px; height:3000px;"></div>
+        <!--class 属性が空で、幅（width）が3000ピクセル、高さ（height）が3000ピクセルに設定されている-->
+
+</body>
+</html>

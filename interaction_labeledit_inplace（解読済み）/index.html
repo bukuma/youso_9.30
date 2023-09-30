@@ -1,0 +1,69 @@
+<html xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
+<head>
+<title></title>
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="viewport" content="width=device-width, minimum-scale=1.0, , maximum-scale=1.0" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+  <link type="text/css" rel="stylesheet" href="./css/example.css" />
+
+  <script src="./lib/jquery.js"></script>
+  <script src="./lib/jquery-ui.js"></script>
+
+  <script src="../draw2d.js"></script>
+
+	<script src="LabelRectangle.js"></script>
+
+<script type="text/javascript">
+
+document.addEventListener("DOMContentLoaded",function () {
+//いつもの
+     
+	 var canvas = new draw2d.Canvas("gfx_holder");
+	 //canvas という変数を宣言
+	 //draw2d.Canvas クラスのコンストラクタを呼び出して、新しいキャンバスを作成
+	 //コンストラクタの引数として "gfx_holder"
+	 //これは、キャンバスが描画されるHTML文書内の既存のDIV要素のIDを指定している
+
+	 var rect = new LabelRectangle({width:100, height:80});
+     //rect という変数を宣言
+	 //この変数は、新しいカスタムの長方形図形のインスタンスを格納するために使用される
+	 //LabelRectangle というカスタム図形クラスのコンストラクタを呼び出して、新しい図形を作成
+	 //カスタム図形の属性は、中括弧 {} 内に指定されている
+
+	 canvas.add( rect, 150,200);
+	 //作成したカスタムの長方形図形 (rect) を Draw2D キャンバスに追加する操作
+	 // (rect) を Draw2D キャンバス上に配置
+	 //指定された座標位置 (150, 200) に表示
+	 //これにより、ユーザーはキャンバス上に図形を配置し、必要に応じて操作できるように
+
+
+	 var msg = new draw2d.shape.note.PostIt({text:"DoubleClick on the label to edit the text."});
+	 //msg という変数を宣言
+	 //この変数は、新しいメモ形状（PostIt）のインスタンスを格納するために使用される
+	 //draw2d.shape.note.PostIt クラスのコンストラクタを呼び出して、新しいメモ形状を作成
+	 //メモ形状の属性は、中括弧 {} 内に指定
+	 canvas.add(msg, 20,20);
+	 //メモ形状（PostIt）である msg を Draw2D キャンバス上に配置
+	 //座標位置 (20, 20) に表示
+
+
+	 //このコードは、jQueryを使用してウェブページ全体のスクロール位置を横方向と縦方向の両方ともゼロに設定する操作を行っている
+	 $("body").scrollTop(0)
+	 //jQueryセレクタを使用してHTML文書内の <body> 要素を選択
+	          .scrollLeft(0);
+			  //crollLeft(0) は、選択された要素（ここでは <body> 要素）の横方向のスクロール位置を0に設定するメソッド
+			  //これにより、ウェブページが横方向にスクロールされず、一番左に表示される
+});
+
+</script>
+
+</head>
+
+<body>
+   <div  onselectstart="javascript:/*IE8 hack*/return false" id="gfx_holder" style="width:1500px; height:1500px; ">
+	
+   </div>
+
+</body>
+</html>

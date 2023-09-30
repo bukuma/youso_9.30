@@ -1,0 +1,181 @@
+<html xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
+<head>
+<title></title>
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="viewport" content="width=device-width, minimum-scale=1.0" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <!--以下、リンク先-->
+  <link type="text/css" rel="stylesheet" href="./css/example.css" />
+
+  <script src="./lib/jquery.js"></script>
+  <script src="./lib/jquery-ui.js"></script>
+
+  <script src="../draw2d.js"></script>
+
+<script type="text/javascript">
+
+document.addEventListener("DOMContentLoaded",function () {
+//いつもの
+    var canvas = new draw2d.Canvas("gfx_holder");
+    //var canvas: 変数 canvas を宣言
+    //new draw2d.Canvas("gfx_holder"): draw2d.Canvas クラスの新しいインスタンスを作成
+    //引数 "gfx_holder" は、キャンバスが描画されるHTML要素のIDを指定している
+    //→キャンバスがHTML内の "gfx_holder" というIDを持つ要素に関連付けられている
+
+    var d = new draw2d.shape.basic.Rectangle({width:50, height:100, x:100, y:100});
+    //変数 d を宣言→新しいインスタンスを作成
+
+    //Draw2Dキャンバス上に長方形図形を追加し、その図形に入力および出力ポートを特定の位置ロケータを使用して追加
+    var inputLocator  = new draw2d.layout.locator.InputPortLocator();
+    //inputLocator という変数を宣言
+    //draw2d.layout.locator.InputPortLocator クラスの新しいインスタンスを作成
+    //これは、ポートの位置を設定するためのロケータ（位置決定アルゴリズム）
+    var outputLocator = new draw2d.layout.locator.OutputPortLocator();
+    //outputLocator という変数を宣言
+    //draw2d.layout.locator.OutputPortLocator クラスの新しいインスタンスを作成
+    //これもポートの位置を設定するためのロケータ
+
+    d.createPort("hybrid",inputLocator);
+    //d という長方形図形に対して、新しいポートを作成
+    //ポートの種類として "hybrid" を指定
+    //"hybrid" は異なる種類の接続をサポートするポートを表す
+    //inputLocator を使用して、ポートの位置を決定
+    //この場合、inputLocator は入力ポート用の位置決定アルゴリズム
+    d.createPort("hybrid",inputLocator);
+    d.createPort("hybrid",outputLocator);
+    //長方形図形 d に新しい出力ポートを作成
+    //outputLocator を使用して、ポートの位置を決定
+    //outputLocator は出力ポート用の位置決定アルゴリズム
+    d.createPort("hybrid",outputLocator);
+
+    canvas.add( d);
+    //作成した長方形図形 d をキャンバスに追加
+    canvas.add(new draw2d.shape.basic.Label({text:"Add ports to the shape with a given locator", x:230, y:130}));
+    //ラベルを作成
+    //このラベルは、特定のロケータを使用して図形にポートを追加することに関する情報を提供
+    //このラベルをキャンバスに追加し、特定の座標（x: 230, y: 130）に配置
+
+
+    
+    //Draw2Dライブラリを使用して新しいダイヤモンド形状 (d2) を作成し、キャンバスに追加し、その後にダイヤモンド形状に入力と出力のポートを追加する操作
+    var d2 = new draw2d.shape.basic.Diamond({width:50, height:60,x:100, y:300});
+    //変数 d2 を宣言
+    //新しいダイヤモンド形状を格納するために使用される
+    //{width: 50, height: 60, x: 100, y: 300}: ダイヤモンド形状の属性を指定
+    canvas.add( d2);
+    //作成したダイヤモンド形状 d2 をキャンバスに追加
+    d2.createPort("input");
+    //ダイヤモンド形状 d2 に新しい入力ポートを作成
+    d2.createPort("output");
+    //ダイヤモンド形状 d2 に新しい出力ポートを作成
+
+    canvas.add(new draw2d.shape.basic.Label({text:"Add ports to the shape after canvas assignment with default locator", x:230, y:330}));
+    //ラベルを作成
+
+
+    //カスタムポートロケータ（MyInputPortLocatorおよびMyOutputPortLocator）を定義
+    //→PortLocatorクラスを拡張
+    //特定の図形上の入力および出力ポートの位置を指定するために使用されている
+    var MyInputPortLocator = draw2d.layout.locator.PortLocator.extend({
+        //MyInputPortLocator という変数を宣言
+        //カスタムの入力ポートロケータを格納するために使用される
+        //draw2d.layout.locator.PortLocator クラスを拡張して新しいロケータを作成
+        init:function( ){
+          //init メソッドを定義
+          //オブジェクトが初期化されるときに実行されるコードを含むメソッド
+          this._super();
+          //this._super(); は、親クラスdraw2d.layout.locator.PortLocator）の初期化メソッドを呼び出すす
+        },
+        relocate:function(index, figure){
+          //relocate メソッドを定義
+          //このメソッドは、ポートの位置を再配置するために呼び出される
+          //index パラメータは、ポートのインデックスを示し、figure パラメータはポートの図形を表す
+            this.applyConsiderRotation(figure, figure.getParent().getWidth()/2, 0);
+            //applyConsiderRotation メソッドを使用して、ポートの位置を計算および設定
+            //figure はポートの図形
+            //figure.getParent().getWidth() は親図形（ポートが配置される図形）の幅を取得
+            //getParent() で親図形への参照を取得
+            //figure.getParent().getWidth() / 2 は親図形の中央にポートを配置するためのX座標位置
+            //Y座標は0
+        }
+    });
+
+    
+    //カスタムの出力ポートロケータ（MyOutputPortLocator）を定義
+    //このロケータは、出力ポートが配置される位置を指定するために使用される
+    var MyOutputPortLocator = draw2d.layout.locator.PortLocator.extend({
+    //MyOutputPortLocator という変数を宣言
+    //カスタムの出力ポートロケータを格納するために使用される
+        init:function( ){
+          //init メソッドを定義
+          //これはオブジェクトが初期化されるときに実行されるコードを含むメソッド
+          this._super();
+          //親クラス（draw2d.layout.locator.PortLocator）の初期化メソッドを呼び出すす
+        },
+        relocate:function(index, figure){
+          //relocate メソッドを定義
+          //このメソッドは、ポートの位置を再配置するために呼び出される
+          //index パラメータは、ポートのインデックスを示し、figure パラメータはポートの図形を表す
+            var p = figure.getParent();
+            //p という変数を宣言し、figure.getParent() を使用して、ポートの親図形への参照を取得
+
+            this.applyConsiderRotation(figure, p.getWidth()/2, p.getHeight());
+            //applyConsiderRotation メソッドを使用して、ポートの位置を計算および設定
+            //figure はポートの図形
+            //p.getWidth()/2 は親図形の幅の半分に設定されたX座標位置。これにより、ポートは親図形の中央に配置される
+            //p.getHeight() は親図形の高さに設定されたY座標位置。これにより、ポートは親図形の下端に配置される
+        }
+    });
+
+  //Draw2Dライブラリを使用して新しい長方形図形 (topBottom) を作成し、この図形にカスタムポートロケータを使用して入力と出力のポートを追加し、キャンバスに配置する操作を行っている
+  var topBottom = new draw2d.shape.basic.Rectangle({width:50, height:100, x:100, y:500});
+  //topBottom という変数を宣言
+  //draw2d.shape.basic.Rectangle クラスの新しいインスタンスを作成
+  topBottom.createPort("hybrid",new MyInputPortLocator());
+  //topBottom 長方形図形に対して、新しい入力ポートを作成
+  //ポートの種類として "hybrid" を指定。これは異なる種類の接続をサポートするポートを表す
+  //new MyInputPortLocator() は、カスタムの入力ポートロケータ MyInputPortLocator を使用してポートの位置を指定
+  topBottom.createPort("hybrid",new MyOutputPortLocator());
+  //topBottom 長方形図形にもう一つの出力ポートを作成
+  //ポートの種類として "hybrid" を指定
+  //new MyOutputPortLocator() は、カスタムの出力ポートロケータ MyOutputPortLocator を使用してポートの位置を指定
+
+  canvas.add( topBottom);
+  //作成した topBottom 長方形図形をキャンバスに追加
+  canvas.add(new draw2d.shape.basic.Label({text:"Add ports to the shape with a custom locator", x:230, y:530}));
+  //ラベルを作成
+  //このラベルは、カスタムロケータを使用して図形にポートを追加する操作に関する情報を提供
+  //ベルをキャンバスに追加し、特定の座標（x: 230, y: 530）に配置
+
+
+  // Draw2Dライブラリを使用して新しいメモ形状 (msg) を作成し、キャンバスに追加する操作
+  var msg = new draw2d.shape.note.PostIt({text:"Add input and output ports at any position of the \nshape via generic API calls.", x:20, y:20});
+  //msg という変数を宣言
+  //新しいメモ形状（ポストイット）を格納するために使用
+  //draw2d.shape.note.PostIt クラスの新しいインスタンスを作成
+  //これは、Draw2Dライブラリ内で提供されているメモ形状
+  canvas.add(msg);
+  //作成したメモ形状 msg をキャンバスに追加
+  //メモ形状がキャンバス上に表示され、指定された位置（x: 20, y: 20）に配置される
+
+});
+
+</script>
+
+</head>
+
+<body>
+<div  onselectstart="javascript:/*IE8 hack*/return false" id="gfx_holder" style="width:3000px; height:3000px;">
+  <!--onselectstart属性には、return falseというJavaScriptコードが指定されている
+  　　これはInternet Explorer 8（IE8）のためのハックで、テキストの選択を無効にするためのもの
+　　　通常、これはテキストの選択を禁止するために使用される
+　　　
+　　　id="gfx_holder": gfx_holder というIDが要素に割り当てられている
+　　　IDは要素を一意に識別するために使用される
+
+　　　-->
+</div>
+
+
+</body>
+</html>

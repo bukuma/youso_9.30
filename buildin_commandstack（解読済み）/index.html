@@ -1,0 +1,68 @@
+<html xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
+<head>
+<title></title>
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="viewport" content="width=device-width, minimum-scale=1.0" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+   <link type="text/css" rel="stylesheet" href="./css/aristo/jquery-ui-1.8.16.custom.css" />
+   <link type="text/css" rel="stylesheet" href="./css/jquery.layout.css" />
+   <link type="text/css" rel="stylesheet" href="./css/application.css" />
+
+    <script src="./lib/jquery.js"></script>
+    <script src="./lib/jquery-ui.js"></script>
+    <script src="./lib/jquery.browser.js"></script>
+    <script src="./lib/jquery.layout.js"></script>
+
+    <script src="../draw2d.js"></script>
+
+    <script src="./gui/Application.js"></script>
+	  <script src="./gui/View.js"></script>
+    <script src="./gui/Toolbar.js"></script>
+    <script src="./gui/HoverConnection.js"></script>
+
+ <script type="text/javascript">
+
+document.addEventListener("DOMContentLoaded",function () {
+//いつもの
+
+     var app  = new example.Application();
+     //新しい example.Application のインスタンスを作成し、それを変数 app に代入
+     app.view.installEditPolicy(  new draw2d.policy.connection.DragConnectionCreatePolicy({
+     // app.view は app オブジェクトの中にある view プロパティまたはメソッドを参照している
+     // new draw2d.policy.connection.DragConnectionCreatePolicy({ は、新しい DragConnectionCreatePolicy のインスタンスを作成
+     //このインスタンスは、コネクション（接続）をドラッグして作成するためのポリシーを表す
+        createConnection: function(){
+        //新しい関数を定義
+            return new HoverConnection();
+            //新しい HoverConnection のインスタンスを作成してそれを返す
+        }
+      }));
+});
+
+</script>
+
+</head>
+
+<body id="container">
+
+   <div id="content">
+   		<div id="toolbar"></div>
+         <!--toolbar というID属性を持つ別の <div> 要素を開始-->
+   		<div id="canvas" class="" style="width:3000px; height:3000px;"></div>
+         <!--canvas というID属性を持つ <div> 要素を開始
+             この場合、キャンバスの幅は3000ピクセルで、高さも3000ピクセル-->
+   </div>
+
+   <div id="navigation" class="">
+      <!--navigation というID属性を持つ <div> 要素を開始,ナビゲーションまたはツールボックス-->
+    	
+      <!--このコードの目的は、ナビゲーション要素内に異なる形状や要素を表示し、それらを選択またはドラッグして特定のアクションを実行するためのユーザーインターフェースを提供すること
+          data-shape 属性は、これらの要素がどのような形状や要素を表しているかを識別するために使用される-->
+      <div data-shape="draw2d.shape.node.Start"   class="palette_node_element draw2d_droppable">Start</div>
+    	<div data-shape="draw2d.shape.node.End"     class="palette_node_element draw2d_droppable">End</div>
+    	<div data-shape="draw2d.shape.node.Between" class="palette_node_element draw2d_droppable">Between</div>
+   </div>
+
+</body>
+</html>
